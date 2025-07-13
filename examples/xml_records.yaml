@@ -1,0 +1,74 @@
+# XML Document Generation
+# Demonstrates XML-specific settings and nested structure
+
+fields:
+  - name: "id"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_int"
+        min: 1000
+        max: 9999
+
+  - name: "name"
+    generator:
+      type: "list"
+      settings:
+        values:
+          [
+            "Alice Johnson",
+            "Bob Smith",
+            "Charlie Brown",
+            "Diana Prince",
+            "Eve Wilson",
+          ]
+
+  - name: "email"
+    generator:
+      type: "expression"
+      settings:
+        expression: "#name|@example.com"
+
+  - name: "created_at"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_isodate"
+        start_date: "2023-01-01T00:00:00Z"
+        end_date: "2023-12-31T23:59:59Z"
+
+  - name: "status"
+    generator:
+      type: "list"
+      settings:
+        values: ["active", "inactive", "pending"]
+
+  - name: "role"
+    generator:
+      type: "list"
+      settings:
+        values: ["admin", "user", "moderator", "guest"]
+
+  - name: "last_login"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_isodate"
+        start_date: "2023-10-01T00:00:00Z"
+        end_date: "2023-10-31T23:59:59Z"
+
+  - name: "preferences"
+    generator:
+      type: "expression"
+      settings:
+        expression: "theme:dark,notifications:true,language:en"
+
+output:
+  type: "xml"
+  file: "xml_records.xml"
+  settings:
+    root_node: "users"
+    record_node: "user"
+    indent: "  "
+    xml_declaration: true
+    encoding: "UTF-8"

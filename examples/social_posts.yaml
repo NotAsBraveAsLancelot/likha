@@ -1,0 +1,106 @@
+# Social Media Posts Generation
+# Demonstrates content templates and engagement metrics
+
+fields:
+  - name: "post_id"
+    generator:
+      type: "expression"
+      settings:
+        expression: "POST-$random_int(1000000000,9999999999)"
+
+  - name: "username"
+    generator:
+      type: "list"
+      settings:
+        values:
+          ["alice_42", "bob_dev", "charlie_photo", "diana_travel", "eve_cook"]
+
+  - name: "user_handle"
+    generator:
+      type: "expression"
+      settings:
+        expression: "@user_#username"
+
+  - name: "content_template"
+    generator:
+      type: "list"
+      settings:
+        values:
+          [
+            "Just had an amazing coffee! #MorningFuel",
+            "Beautiful sunset today! #Nature #Photography",
+            "Working on exciting new project #Tech #Innovation",
+            "Great workout session completed! #Fitness #Health",
+            "Delicious homemade pasta tonight #Cooking #Food",
+          ]
+
+  - name: "content"
+    generator:
+      type: "expression"
+      settings:
+        expression: "#content_template #CoffeeLovers"
+
+  - name: "timestamp"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_isodate"
+        start_date: "2023-10-01T00:00:00Z"
+        end_date: "2023-10-31T23:59:59Z"
+
+  - name: "likes"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_int"
+        min: 0
+        max: 1000
+
+  - name: "shares"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_int"
+        min: 0
+        max: 50
+
+  - name: "comments"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_int"
+        min: 0
+        max: 100
+
+  - name: "hashtags"
+    generator:
+      type: "expression"
+      settings:
+        expression: "MorningFuel,CoffeeLovers,Daily"
+
+  - name: "media_type"
+    generator:
+      type: "list"
+      settings:
+        values: ["image", "video", "text", "gif"]
+
+  - name: "engagement_rate"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_decimal"
+        min: 0.1
+        max: 15.0
+        decimal_places: 2
+
+  - name: "is_verified"
+    generator:
+      type: "list"
+      settings:
+        values: [true, false]
+
+output:
+  type: "json"
+  file: "social_posts.json"
+  settings:
+    pretty: true

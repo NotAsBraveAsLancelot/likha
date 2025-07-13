@@ -1,0 +1,101 @@
+fields:
+  - name: "product_id"
+    generator:
+      type: "expression"
+      settings:
+        expression: "PROD-$random_int(1000,9999)"
+
+  - name: "name"
+    generator:
+      type: "list"
+      settings:
+        values:
+          [
+            "Wireless Headphones",
+            "Smartphone",
+            "Laptop",
+            "Tablet",
+            "Smart Watch",
+            "Bluetooth Speaker",
+            "Gaming Mouse",
+            "Keyboard",
+            "Monitor",
+            "Webcam",
+          ]
+
+  - name: "price"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_decimal"
+        min: 9.99
+        max: 999.99
+        decimal_places: 2
+
+  - name: "category"
+    generator:
+      type: "list"
+      settings:
+        values: ["Electronics", "Accessories", "Computing", "Audio", "Gaming"]
+
+  - name: "stock_quantity"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_int"
+        min: 0
+        max: 100
+  - name: "shipping_weight"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_decimal"
+        min: 0.1
+        max: 5.0
+        decimal_places: 2# E-commerce Product Catalog Generation
+  - name: "discount_percentage"
+    generator:
+      type: "foreignkey"
+      source_field: "category"
+      map:
+        "Electronics":
+          type: "builtin"
+          settings:
+            function: "random_decimal"
+            min: 0.0
+            max: 15.0
+            decimal_places: 1
+        "Accessories":
+          type: "builtin"
+          settings:
+            function: "random_decimal"
+            min: 5.0
+            max: 25.0
+            decimal_places: 1
+        "Computing":
+          type: "builtin"
+          settings:
+            function: "random_decimal"
+            min: 0.0
+            max: 10.0
+            decimal_places: 1
+        "Audio":
+          type: "builtin"
+          settings:
+            function: "random_decimal"
+            min: 0.0
+            max: 20.0
+            decimal_places: 1
+        "Gaming":
+          type: "builtin"
+          settings:
+            function: "random_decimal"
+            min: 0.0
+            max: 30.0
+            decimal_places: 1
+
+output:
+  type: "json"
+  file: "ecommerce_products.json"
+  settings:
+    pretty: true

@@ -1,0 +1,25 @@
+fields:
+  - name: "id"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_int"
+        min: 1000
+        max: 9999
+
+  - name: "username"
+    generator:
+      type: "expression"
+      settings:
+        expression: "user_$random_string(8)"
+
+  - name: "custom_execution"
+    generator:
+      type: "custom"
+      settings:
+        command: "/usr/bin/echo hello"
+output:
+  type: "json"
+  file: "custom_generator_output.json"
+  settings:
+    pretty: true

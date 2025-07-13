@@ -1,0 +1,52 @@
+fields:
+  - name: "id"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_int"
+        min: 1000
+        max: 9999
+
+  - name: "name"
+    generator:
+      type: "list"
+      settings:
+        values:
+          [
+            "Alice",
+            "Bob",
+            "Charlie",
+            "Diana",
+            "Eve",
+            "Frank",
+            "Grace",
+            "Henry",
+            "Ivy",
+            "Jack",
+          ]
+
+  - name: "email"
+    generator:
+      type: "expression"
+      settings:
+        expression: "#name-$random_int(10,99)@example.com"
+
+  - name: "registered_at"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_isodate"
+        start_date: "2022-01-01T00:00:00Z"
+        end_date: "2023-12-31T23:59:59Z"
+
+  - name: "status"
+    generator:
+      type: "list"
+      settings:
+        values: ["active", "inactive", "pending"]
+
+output:
+  type: "json"
+  file: "basic_users.json"
+  settings:
+    pretty: true

@@ -1,0 +1,90 @@
+# Server Log Simulation
+# Demonstrates timestamp generation and method-status correlation
+
+fields:
+  - name: "timestamp"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_isodate"
+        start_date: "2023-10-01T00:00:00Z"
+        end_date: "2023-10-31T23:59:59Z"
+
+  - name: "ip_address"
+    generator:
+      type: "expression"
+      settings:
+        expression: "$random_int(1,255).$random_int(0,255).$random_int(0,255).$random_int(1,255)"
+
+  - name: "method"
+    generator:
+      type: "list"
+      settings:
+        values: ["GET", "POST", "PUT", "DELETE", "PATCH"]
+
+  - name: "endpoint"
+    generator:
+      type: "list"
+      settings:
+        values:
+          [
+            "/api/users",
+            "/api/products",
+            "/api/orders",
+            "/health",
+            "/metrics",
+            "/auth/login",
+            "/auth/logout",
+          ]
+
+  - name: "status_code"
+    generator:
+      type: "foreignkey"
+      source_field: "method"
+      map:
+        "GET":
+          type: "list"
+          settings:
+            values: [200, 404, 500]
+        "POST":
+          type: "list"
+          settings:
+            values: [201, 400, 422, 500]
+        "PUT":
+          type: "list"
+          settings:
+            values: [200, 404, 400, 500]
+        "DELETE":
+          type: "list"
+          settings:
+            values: [204, 404, 500]
+        "PATCH":
+          type: "list"
+          settings:
+            values: [200, 404, 400, 500]
+
+  - name: "response_time_ms"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_int"
+        min: 10
+        max: 2000
+
+  - name: "user_agent"
+    generator:
+      type: "list"
+      settings:
+        values:
+          [
+            "Mozilla/5.0 (compatible; bot/1.0)",
+            "curl/7.68.0",
+            "PostmanRuntime/7.28.0",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+          ]
+
+output:
+  type: "json"
+  file: "server_logs.json"
+  settings:
+    pretty: true

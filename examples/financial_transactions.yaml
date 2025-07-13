@@ -1,0 +1,111 @@
+fields:
+  - name: "transaction_id"
+    generator:
+      type: "expression"
+      settings:
+        expression: "TXN-$random_int(1000000000,9999999999)"
+
+  - name: "account_number"
+    generator:
+      type: "expression"
+      settings:
+        expression: "ACC-$random_int(1000,9999)"
+
+  - name: "transaction_type"
+    generator:
+      type: "list"
+      settings:
+        values: ["debit", "credit", "transfer", "fee"]
+
+  - name: "amount"
+    generator:
+      type: "foreignkey"
+      source_field: "transaction_type"
+      map:
+        "debit":
+          type: "builtin"
+          settings:
+            function: "random_decimal"
+            min: -500.00
+            max: -0.01
+            decimal_places: 2
+        "credit":
+          type: "builtin"
+          settings:
+            function: "random_decimal"
+            min: 0.01
+            max: 5000.00
+            decimal_places: 2
+        "transfer":
+          type: "builtin"
+          settings:
+            function: "random_decimal"
+            min: -2000.00
+            max: 2000.00
+            decimal_places: 2
+        "fee":
+          type: "builtin"
+          settings:
+            function: "random_decimal"
+            min: -50.00
+            max: -1.00
+            decimal_places: 2
+
+  - name: "currency"
+    generator:
+      type: "list"
+      settings:
+        values: ["USD", "EUR", "GBP", "JPY", "CAD"]
+
+  - name: "merchant"
+    generator:
+      type: "foreignkey"
+      source_field: "transaction_type"
+      map:
+        "debit":
+          type: "list"
+          settings:
+            values:
+              [
+                "Coffee Shop Downtown",
+                "Gas Station",
+                "Grocery Store",
+                "Restaurant",
+                "Online Store",
+              ]
+        "credit":
+          type: "list"
+          settings:
+            values:
+              ["Salary Deposit", "Refund", "Interest Payment", "Transfer In"]
+        "transfer":
+          type: "list"
+          settings:
+            values: ["Internal Transfer", "Wire Transfer", "P2P Transfer"]
+        "fee":
+          type: "list"
+          settings:
+            values: ["Monthly Fee", "ATM Fee", "Overdraft Fee", "Wire Fee"]
+
+  - name: "timestamp"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_isodate"
+        start_date: "2023-01-01T00:00:00Z"
+        end_date: "2023-12-31T23:59:59Z"
+
+  - name: "balance_after"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_decimal"
+        min: 0.00
+        max: 10000.00
+        decimal_places: 2
+
+output:
+  type: "json"
+  file: "financial_transactions.json"
+  settings:
+    pretty: true

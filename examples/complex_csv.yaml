@@ -1,0 +1,89 @@
+fields:
+  - name: "id"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_int"
+        min: 1000
+        max: 9999
+
+  - name: "name"
+    generator:
+      type: "list"
+      settings:
+        values:
+          [
+            "John Doe",
+            "Jane Smith",
+            "Bob Johnson",
+            "Alice Brown",
+            "Charlie Wilson",
+          ]
+
+  - name: "email"
+    generator:
+      type: "expression"
+      settings:
+        expression: "#name|$random_int(10,99)@email.com"
+
+  - name: "signup_date"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_isodate"
+        start_date: "2023-01-01T00:00:00Z"
+        end_date: "2023-12-31T23:59:59Z"
+
+  - name: "last_login"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_isodate"
+        start_date: "2023-10-01T00:00:00Z"
+        end_date: "2023-10-31T23:59:59Z"
+
+  - name: "status"
+    generator:
+      type: "list"
+      settings:
+        values: ["active", "inactive", "suspended", "pending"]
+
+  - name: "login_count"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_int"
+        min: 0
+        max: 100
+
+  - name: "account_balance"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_decimal"
+        min: 0.00
+        max: 1000.00
+        decimal_places: 2
+
+  - name: "notes"
+    generator:
+      type: "list"
+      settings:
+        values:
+          [
+            "Regular customer",
+            "VIP member",
+            "New signup",
+            "Requires verification",
+            null,
+          ]
+
+output:
+  type: "csv"
+  file: "complex_data.csv"
+  settings:
+    delimiter: ","
+    include_headers: true
+    quote_char: '"'
+    escape_char: "\\"
+    null_value: ""

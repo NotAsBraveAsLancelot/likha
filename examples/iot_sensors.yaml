@@ -1,0 +1,124 @@
+# IoT Sensor Data Generation
+# Demonstrates sensor type-specific value ranges and location data
+
+fields:
+  - name: "device_id"
+    generator:
+      type: "expression"
+      settings:
+        expression: "SENSOR-$random_string(4)"
+
+  - name: "sensor_type"
+    generator:
+      type: "list"
+      settings:
+        values: ["temperature", "humidity", "pressure", "light", "motion"]
+
+  - name: "value"
+    generator:
+      type: "foreignkey"
+      source_field: "sensor_type"
+      map:
+        "temperature":
+          type: "builtin"
+          settings:
+            function: "random_decimal"
+            min: -20.0
+            max: 50.0
+            decimal_places: 1
+        "humidity":
+          type: "builtin"
+          settings:
+            function: "random_decimal"
+            min: 0.0
+            max: 100.0
+            decimal_places: 1
+        "pressure":
+          type: "builtin"
+          settings:
+            function: "random_decimal"
+            min: 980.0
+            max: 1050.0
+            decimal_places: 2
+        "light":
+          type: "builtin"
+          settings:
+            function: "random_int"
+            min: 0
+            max: 1000
+        "motion":
+          type: "list"
+          settings:
+            values: [true, false]
+
+  - name: "unit"
+    generator:
+      type: "foreignkey"
+      source_field: "sensor_type"
+      map:
+        "temperature":
+          type: "simple"
+          settings:
+            value: "celsius"
+        "humidity":
+          type: "simple"
+          settings:
+            value: "percent"
+        "pressure":
+          type: "simple"
+          settings:
+            value: "hpa"
+        "light":
+          type: "simple"
+          settings:
+            value: "lux"
+        "motion":
+          type: "simple"
+          settings:
+            value: "boolean"
+
+  - name: "timestamp"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_isodate"
+        start_date: "2023-11-01T00:00:00Z"
+        end_date: "2023-11-30T23:59:59Z"
+
+  - name: "location_latitude"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_decimal"
+        min: 40.0
+        max: 41.0
+        decimal_places: 6
+
+  - name: "location_longitude"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_decimal"
+        min: -74.5
+        max: -73.5
+        decimal_places: 6
+
+  - name: "battery_level"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_int"
+        min: 5
+        max: 100
+
+  - name: "status"
+    generator:
+      type: "list"
+      settings:
+        values: ["online", "offline", "maintenance", "low_battery"]
+
+output:
+  type: "json"
+  file: "iot_sensors.json"
+  settings:
+    pretty: true

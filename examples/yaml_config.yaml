@@ -1,0 +1,90 @@
+# YAML Output Configuration
+# Demonstrates YAML-specific formatting and nested structures
+
+fields:
+  - name: "id"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_int"
+        min: 1000
+        max: 9999
+
+  - name: "name"
+    generator:
+      type: "list"
+      settings:
+        values:
+          [
+            "Alice Johnson",
+            "Bob Smith",
+            "Charlie Brown",
+            "Diana Prince",
+            "Eve Wilson",
+          ]
+
+  - name: "email"
+    generator:
+      type: "expression"
+      settings:
+        expression: "#name|@example.com"
+
+  - name: "preferences_theme"
+    generator:
+      type: "list"
+      settings:
+        values: ["dark", "light", "auto"]
+
+  - name: "preferences_notifications"
+    generator:
+      type: "list"
+      settings:
+        values: [true, false]
+
+  - name: "preferences_languages"
+    generator:
+      type: "list"
+      settings:
+        values: ["en", "es", "fr", "de", "it"]
+
+  - name: "created_at"
+    generator:
+      type: "builtin"
+      settings:
+        function: "random_isodate"
+        start_date: "2023-01-01T00:00:00Z"
+        end_date: "2023-12-31T23:59:59Z"
+
+  - name: "is_active"
+    generator:
+      type: "list"
+      settings:
+        values: [true, false]
+
+  - name: "bio"
+    generator:
+      type: "list"
+      settings:
+        values:
+          [
+            "Software developer",
+            "Product manager",
+            "Designer",
+            "Data scientist",
+            null,
+          ]
+
+  - name: "tags"
+    generator:
+      type: "expression"
+      settings:
+        expression: "user,verified,$random_string(5)"
+
+output:
+  type: "yaml"
+  file: "yaml_config.yaml"
+  settings:
+    indent: 2
+    array_format: "block"
+    null_value: null
+    boolean_format: "lowercase"
